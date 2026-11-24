@@ -1,0 +1,7 @@
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\ExamenFinal\obj\Debug\net7.0\ExamenFinal.csproj.AssemblyReference.cache
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\ExamenFinal\obj\Debug\net7.0\ExamenFinal.GeneratedMSBuildEditorConfig.editorconfig
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\ExamenFinal\obj\Debug\net7.0\ExamenFinal.AssemblyInfoInputs.cache
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\ExamenFinal\obj\Debug\net7.0\ExamenFinal.AssemblyInfo.cs
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\ExamenFinal\obj\Debug\net7.0\ExamenFinal.csproj.CoreCompileInputs.cache
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\ExamenFinal\obj\Debug\net7.0\ExamenFinal.MvcApplicationPartsAssemblyInfo.cs
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\ExamenFinal\obj\Debug\net7.0\ExamenFinal.MvcApplicationPartsAssemblyInfo.cache

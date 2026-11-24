@@ -1,0 +1,149 @@
+@page
+@model ProjecBlazor.Pages.Tutores.IndexModel
+@{
+    ViewData["Title"] = "Directorio de Tutores Académicos";
+}
+
+<style>
+    :root {
+        --magenta-primary: #d81b60;
+        --magenta-dark: #880e4f;
+        --magenta-light: #fce4ec;
+        --magenta-gradient: linear-gradient(135deg, #ad1457 0%, #e91e63 100%);
+    }
+
+    .bg-magenta-gradient {
+        background: var(--magenta-gradient);
+    }
+
+    .text-magenta {
+        color: var(--magenta-primary);
+    }
+
+    .btn-magenta {
+        background: var(--magenta-gradient);
+        color: #ffffff !important;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-magenta:hover {
+        background: linear-gradient(135deg, #880e4f 0%, #d81b60 100%);
+        box-shadow: 0 4px 12px rgba(216, 27, 96, 0.35);
+        transform: translateY(-2px);
+    }
+
+    .card-tutor {
+        border: 1px solid rgba(216, 27, 96, 0.15);
+        border-radius: 1.25rem;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card-tutor:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.85rem 1.75rem rgba(216, 27, 96, 0.15) !important;
+    }
+</style>
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom" style="border-color: rgba(216, 27, 96, 0.2) !important;">
+    <div>
+        <h1 class="fw-bold text-magenta mb-1">
+            <i class="bi bi-person-badge-fill me-2"></i>Directorio de Tutores Académicos
+        </h1>
+        <p class="text-muted mb-0">Gestión de docentes tutores y control de cupos de tesis (máximo 3 tesis por tutor).</p>
+    </div>
+    <div class="mt-3 mt-sm-0 d-flex gap-2">
+        <a asp-page="/Tesis/Index" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold">
+            <i class="bi bi-arrow-left me-1"></i> Ir a Tesis
+        </a>
+        <a asp-page="Create" class="btn btn-magenta px-4 py-2 rounded-pill fw-semibold shadow-sm">
+            <i class="bi bi-person-plus-fill me-1"></i> Nuevo Tutor
+        </a>
+    </div>
+</div>
+
+@if (TempData["Mensaje"] is string msj)
+{
+    <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2 text-success"></i><strong>¡Éxito!</strong> @msj
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (Model.MensajeError is not null)
+{
+    <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>@Model.MensajeError
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (Model.Tutores.Count == 0 && Model.MensajeError is null)
+{
+    <div class="card border-0 shadow-sm text-center py-5 rounded-4 bg-white">
+        <div class="card-body">
+            <i class="bi bi-person-x display-3 text-muted"></i>
+            <h4 class="fw-bold text-dark mt-3">No hay tutores registrados</h4>
+            <p class="text-muted mb-4">Comienza registrando a los docentes tutores de la carrera.</p>
+            <a asp-page="Create" class="btn btn-magenta rounded-pill px-4">Registrar Primer Tutor</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var tut in Model.Tutores)
+        {
+            var cupoCompleto = tut.TotalTesis >= 3;
+            var porcentaje = (tut.TotalTesis / 3.0) * 100;
+
+            <div class="col">
+                <div class="card card-tutor h-100 bg-white shadow-sm overflow-hidden p-3">
+                    <div class="card-body d-flex flex-column justify-content-between p-3">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="p-3 rounded-circle" style="background-color: var(--magenta-light); color: var(--magenta-primary);">
+                                    <i class="bi bi-person-workspace fs-4"></i>
+                                </div>
+                                <span class="badge rounded-pill @(cupoCompleto ? "bg-danger" : "bg-success") px-3 py-2">
+                                    @(cupoCompleto ? "Cupo Lleno (3/3)" : $"Disponible ({tut.TotalTesis}/3)")
+                                </span>
+                            </div>
+
+                            <h5 class="fw-bold text-dark mb-1">@tut.Nombre</h5>
+                            <div class="text-magenta fw-semibold small mb-2">
+                                <i class="bi bi-mortarboard me-1"></i>@tut.Especialidad
+                            </div>
+
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-envelope-fill me-1 text-muted"></i>@tut.Correo
+                            </p>
+
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between small text-muted mb-1">
+                                    <span>Capacidad asignada:</span>
+                                    <strong>@tut.TotalTesis de 3 tesis</strong>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar @(cupoCompleto ? "bg-danger" : "bg-magenta-gradient")"
+                                         role="progressbar"
+                                         style="width: @porcentaje%;"
+                                         aria-valuenow="@tut.TotalTesis"
+                                         aria-valuemin="0"
+                                         aria-valuemax="3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-top border-light text-center">
+                            <a asp-page="/Tesis/Index" asp-route-TerminoBusqueda="@tut.Nombre" class="small text-magenta fw-semibold text-decoration-none">
+                                <i class="bi bi-search me-1"></i> Ver tesis de este tutor &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

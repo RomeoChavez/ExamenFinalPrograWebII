@@ -1,0 +1,100 @@
+@page
+@model ProjecBlazor.Pages.Tutores.CreateModel
+@{
+    ViewData["Title"] = "Registrar Nuevo Tutor";
+}
+
+<style>
+    :root {
+        --magenta-primary: #d81b60;
+        --magenta-dark: #880e4f;
+        --magenta-light: #fce4ec;
+        --magenta-gradient: linear-gradient(135deg, #ad1457 0%, #e91e63 100%);
+    }
+
+    .text-magenta {
+        color: var(--magenta-primary) !important;
+    }
+
+    .btn-magenta {
+        background: var(--magenta-gradient);
+        color: #ffffff !important;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-magenta:hover {
+        background: linear-gradient(135deg, #880e4f 0%, #d81b60 100%);
+        box-shadow: 0 4px 12px rgba(216, 27, 96, 0.35);
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+            <div style="height: 6px; background: var(--magenta-gradient);"></div>
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="p-3 rounded-4 me-3 fs-3" style="background-color: var(--magenta-light); color: var(--magenta-primary);">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+                    <div>
+                        <h3 class="fw-bold text-dark mb-0">Registrar Nuevo Tutor</h3>
+                        <p class="text-muted small mb-0">1) POST TUTOR (Validación: no duplicado por correo)</p>
+                    </div>
+                </div>
+
+                @if (Model.MensajeError is not null)
+                {
+                    <div class="alert alert-danger rounded-4 shadow-sm border-0 d-flex align-items-center mb-4">
+                        <i class="bi bi-exclamation-circle-fill fs-4 me-3 text-danger"></i>
+                        <div>
+                            <strong>No se pudo registrar el tutor:</strong>
+                            <div>@Model.MensajeError</div>
+                        </div>
+                    </div>
+                }
+
+                <div class="alert rounded-4 mb-4 border-0" style="background-color: #fff0f6; border-left: 4px solid var(--magenta-primary) !important;">
+                    <div class="small text-muted">
+                        <i class="bi bi-info-circle-fill text-magenta me-1"></i>
+                        <strong>Regla de Negocio:</strong> No puede duplicarse el tutor. El correo electrónico debe ser único en el sistema.
+                    </div>
+                </div>
+
+                <form method="post">
+                    <div class="mb-3">
+                        <label asp-for="Tutor.Nombre" class="form-label fw-semibold">Nombre Completo del Tutor <span class="text-danger">*</span></label>
+                        <input asp-for="Tutor.Nombre" class="form-control rounded-3 py-2" placeholder="Ej. Ing. Roberto Mendoza" required />
+                        <span asp-validation-for="Tutor.Nombre" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Tutor.Especialidad" class="form-label fw-semibold">Área / Especialidad <span class="text-danger">*</span></label>
+                        <input asp-for="Tutor.Especialidad" class="form-control rounded-3 py-2" placeholder="Ej. Ciberseguridad, Redes, Inteligencia Artificial" required />
+                        <span asp-validation-for="Tutor.Especialidad" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Tutor.Correo" class="form-label fw-semibold">Correo Electrónico Institucional <span class="text-danger">*</span></label>
+                        <input asp-for="Tutor.Correo" type="email" class="form-control rounded-3 py-2" placeholder="Ej. roberto.mendoza@universidad.edu" required />
+                        <span asp-validation-for="Tutor.Correo" class="text-danger small"></span>
+                        <div class="form-text">Debe ser único; no puede haber dos tutores con el mismo correo.</div>
+                    </div>
+
+                    <div class="d-flex gap-2 justify-content-end pt-3 border-top">
+                        <a asp-page="Index" class="btn btn-outline-secondary px-4 rounded-pill">Cancelar</a>
+                        <button type="submit" class="btn btn-magenta px-4 rounded-pill fw-semibold shadow-sm">
+                            <i class="bi bi-save me-1"></i> Guardar Tutor
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

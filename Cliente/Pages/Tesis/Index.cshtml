@@ -1,0 +1,293 @@
+@page
+@model ProjecBlazor.Pages.Tesis.IndexModel
+@{
+    ViewData["Title"] = "Gestión de Tesis Académicas";
+    var apiBaseUrlDefault = "https://localhost:7062";
+}
+
+<style>
+    :root {
+        --magenta-primary: #d81b60;
+        --magenta-dark: #880e4f;
+        --magenta-light: #fce4ec;
+        --magenta-accent: #ff4081;
+        --magenta-gradient: linear-gradient(135deg, #ad1457 0%, #e91e63 100%);
+    }
+
+    .bg-magenta {
+        background-color: var(--magenta-primary) !important;
+        color: #fff !important;
+    }
+
+    .bg-magenta-light {
+        background-color: var(--magenta-light) !important;
+        color: var(--magenta-dark) !important;
+    }
+
+    .text-magenta {
+        color: var(--magenta-primary) !important;
+    }
+
+    .text-magenta-dark {
+        color: var(--magenta-dark) !important;
+    }
+
+    .btn-magenta {
+        background: var(--magenta-gradient);
+        color: #ffffff !important;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-magenta:hover {
+        background: linear-gradient(135deg, #880e4f 0%, #d81b60 100%);
+        box-shadow: 0 4px 12px rgba(216, 27, 96, 0.35);
+        color: #fff !important;
+        transform: translateY(-2px);
+    }
+
+    .btn-outline-magenta {
+        border: 2px solid var(--magenta-primary);
+        color: var(--magenta-primary) !important;
+        background: transparent;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-magenta:hover {
+        background-color: var(--magenta-primary);
+        color: #ffffff !important;
+        transform: translateY(-2px);
+    }
+
+    .card-thesis {
+        border: 1px solid rgba(216, 27, 96, 0.12);
+        border-radius: 1rem;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        background: #ffffff;
+    }
+
+    .card-thesis:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 0.85rem 1.75rem rgba(216, 27, 96, 0.18) !important;
+    }
+
+    .header-banner {
+        background: var(--magenta-gradient);
+        border-radius: 1rem;
+        color: white;
+        padding: 2rem 2.5rem;
+        box-shadow: 0 6px 20px rgba(216, 27, 96, 0.25);
+    }
+
+    .tutor-card-box {
+        background-color: #fff5f8;
+        border-left: 4px solid var(--magenta-primary);
+        border-radius: 0.5rem;
+        padding: 0.85rem 1rem;
+    }
+
+    .status-badge {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+    }
+
+    .img-thesis-cover {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .card-thesis:hover .img-thesis-cover {
+        transform: scale(1.05);
+    }
+</style>
+
+<!-- Banner Superior Magenta -->
+<div class="header-banner mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+            <h1 class="h2 fw-bold mb-1">
+                <i class="bi bi-mortarboard-fill me-2"></i>Sistema de Tesis y Tutores
+            </h1>
+            <p class="mb-0 text-white-50">Tema B: Gestión académica, búsqueda inteligente de tesis y asignación de tutores.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-page="/Tutores/Index" class="btn btn-light text-magenta fw-semibold rounded-pill px-3 shadow-sm">
+                <i class="bi bi-people-fill me-1"></i> Ver Tutores
+            </a>
+            <a asp-page="Create" class="btn btn-outline-light rounded-pill px-4 fw-semibold shadow-sm">
+                <i class="bi bi-plus-circle-fill me-1"></i> Nueva Tesis
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Alertas de Notificación -->
+@if (TempData["Mensaje"] is string mensaje)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm rounded-4 border-0" role="alert">
+        <i class="bi bi-check-circle-fill me-2 text-success"></i><strong>¡Éxito!</strong> @mensaje
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (Model.MensajeError is not null)
+{
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-4 border-0" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i><strong>Atención:</strong> @Model.MensajeError
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!-- 3) BUSCAR TESIS Y MOSTRAR TUTOR: Barra de Búsqueda -->
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-body p-3 p-md-4">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-12 col-md-9">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-magenta">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text"
+                           name="TerminoBusqueda"
+                           value="@Model.TerminoBusqueda"
+                           class="form-control border-start-0 py-2"
+                           placeholder="Buscar por título de tesis, estudiante, estado, nombre de tutor o especialidad..." />
+                </div>
+            </div>
+            <div class="col-12 col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-magenta w-100 rounded-pill py-2 fw-semibold">
+                    <i class="bi bi-funnel-fill me-1"></i> Buscar Tesis
+                </button>
+                @if (!string.IsNullOrWhiteSpace(Model.TerminoBusqueda))
+                {
+                    <a asp-page="Index" class="btn btn-outline-secondary rounded-pill py-2 px-3" title="Limpiar filtro">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                }
+            </div>
+        </form>
+        @if (!string.IsNullOrWhiteSpace(Model.TerminoBusqueda))
+        {
+            <div class="mt-2 text-muted small">
+                Mostrando resultados para: <strong class="text-magenta">"@Model.TerminoBusqueda"</strong>
+                (@Model.TesisList.Count encontradas)
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Listado de Tesis y Datos del Tutor -->
+@if (Model.TesisList.Count == 0 && Model.MensajeError is null)
+{
+    <div class="card border-0 shadow-sm rounded-4 text-center py-5 bg-white my-4">
+        <div class="card-body py-5">
+            <div class="display-3 text-magenta opacity-50 mb-3"><i class="bi bi-journal-x"></i></div>
+            <h4 class="fw-bold text-dark">No se encontraron tesis</h4>
+            <p class="text-muted mb-4">No hay registros que coincidan con la búsqueda o aún no se han registrado tesis.</p>
+            <a asp-page="Create" class="btn btn-magenta rounded-pill px-4 py-2">
+                <i class="bi bi-plus-lg me-1"></i> Registrar Primera Tesis
+            </a>
+        </div>
+    </div>
+}
+else if (Model.TesisList.Count > 0)
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var t in Model.TesisList)
+        {
+            var baseUrl = !string.IsNullOrEmpty(Model.ApiBaseUrl) ? Model.ApiBaseUrl.TrimEnd('/') : apiBaseUrlDefault;
+            string urlImagen;
+
+            if (string.IsNullOrEmpty(t.Imagen))
+            {
+                urlImagen = "https://placehold.co/600x400/d81b60/ffffff?text=Tesis+Académica";
+            }
+            else if (t.Imagen.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                urlImagen = t.Imagen;
+            }
+            else
+            {
+                var rutaLimpia = t.Imagen.StartsWith("/") ? t.Imagen : "/" + t.Imagen;
+                urlImagen = $"{baseUrl}{rutaLimpia}";
+            }
+
+            <div class="col">
+                <div class="card card-thesis h-100 shadow-sm overflow-hidden d-flex flex-column">
+                    <!-- Portada de Tesis con Lightbox / Zoom -->
+                    <div class="position-relative overflow-hidden" style="height: 200px;">
+                        <a href="@urlImagen" class="glightbox" data-gallery="galeria-tesis" data-title="@t.Titulo" data-description="Estudiante: @t.Estudiante | Tutor: @(t.Tutor?.Nombre ?? "Sin tutor")">
+                            <img src="@urlImagen" alt="@t.Titulo" class="img-thesis-cover" />
+                            <span class="badge bg-magenta position-absolute top-0 end-0 m-3 shadow-sm rounded-pill">
+                                <i class="bi bi-zoom-in me-1"></i> Ver Portada
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="card-body p-4 d-flex flex-column justify-content-between flex-grow-1">
+                        <div>
+                            <!-- Estado con Badge estilo Magenta -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="status-badge bg-magenta-light text-magenta-dark">
+                                    <i class="bi bi-bookmark-check-fill me-1"></i>@t.Estado
+                                </span>
+                                <small class="text-muted"><i class="bi bi-award text-magenta me-1"></i>Grado</small>
+                            </div>
+
+                            <h5 class="card-title fw-bold text-dark mb-2 line-clamp-2">@t.Titulo</h5>
+
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-person-fill text-magenta me-1"></i>
+                                <strong>Estudiante:</strong> @t.Estudiante
+                            </p>
+
+                            <!-- 3) BUSCAR TESIS Y MOSTRAR TUTOR: Sección del Tutor -->
+                            <div class="tutor-card-box mb-3">
+                                <div class="d-flex align-items-center mb-1">
+                                    <i class="bi bi-person-workspace text-magenta me-2 fs-5"></i>
+                                    <div>
+                                        <div class="small text-muted text-uppercase fw-bold" style="font-size: 0.72rem; letter-spacing: 0.5px;">Tutor Asignado</div>
+                                        <div class="fw-bold text-dark">@(t.Tutor?.Nombre ?? "Tutor no asignado")</div>
+                                    </div>
+                                </div>
+                                @if (t.Tutor != null)
+                                {
+                                    <div class="small text-muted mt-1 ps-4">
+                                        <div><i class="bi bi-briefcase me-1 text-magenta"></i>@t.Tutor.Especialidad</div>
+                                        <div><i class="bi bi-envelope me-1 text-magenta"></i>@t.Tutor.Correo</div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-top border-light">
+                            <a href="@urlImagen" class="btn btn-sm btn-outline-magenta w-100 rounded-pill glightbox" data-gallery="galeria-btn" data-title="@t.Titulo">
+                                <i class="bi bi-file-earmark-image me-1"></i> Ver Imagen Ampliada
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof GLightbox !== 'undefined') {
+                GLightbox({
+                    selector: '.glightbox',
+                    touchNavigation: true,
+                    loop: true,
+                    zoomable: true
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,11 @@
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\bin\Debug\net7.0\Contrato.deps.json
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\bin\Debug\net7.0\Contrato.dll
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\bin\Debug\net7.0\Contrato.pdb
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\obj\Debug\net7.0\Contrato.GeneratedMSBuildEditorConfig.editorconfig
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\obj\Debug\net7.0\Contrato.AssemblyInfoInputs.cache
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\obj\Debug\net7.0\Contrato.AssemblyInfo.cs
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\obj\Debug\net7.0\Contrato.csproj.CoreCompileInputs.cache
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\obj\Debug\net7.0\Contrato.dll
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\obj\Debug\net7.0\refint\Contrato.dll
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\obj\Debug\net7.0\Contrato.pdb
+G:\Universidad\ProgramacionWebII\ExamenFinal\ExamenFinal\Contrato\obj\Debug\net7.0\ref\Contrato.dll
